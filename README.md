@@ -1,89 +1,293 @@
-# ShopLoop — React + Node/Express + MongoDB Ecommerce App
+# 🛍️ ShopLoop – Full Stack Ecommerce Application
 
-A learning-focused fullstack ecommerce app:
+A modern full-stack ecommerce web application built using the **MERN** stack. The application allows users to browse products, register and log in securely, manage a shopping cart, place orders, and view order history.
 
-- **Frontend**: React (Vite) + Tailwind CSS, product data from [DummyJSON](https://dummyjson.com/)
-- **Backend**: Node.js + Express + MongoDB (Mongoose), JWT authentication
-- **Features**: browse/search/filter products, product detail pages, cart (persisted per user in MongoDB), checkout flow, order history
+Product data is fetched from the **DummyJSON API**, while user accounts, carts, and orders are stored in **MongoDB**.
 
-## Project structure
+---
 
+## 🚀 Features
+
+* User registration and login
+* JWT authentication
+* Password hashing with bcrypt
+* Browse products
+* Search products
+* Filter products
+* Product details page
+* Shopping cart
+* Persistent cart stored in MongoDB
+* Checkout process
+* Order history
+* Responsive design using Tailwind CSS
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+
+* React (Vite)
+* Tailwind CSS
+* Axios
+* React Router DOM
+
+### Backend
+
+* Node.js
+* Express.js
+* MongoDB
+* Mongoose
+* JWT Authentication
+* bcrypt
+
+### API
+
+* DummyJSON API (Product Catalog)
+
+---
+
+## 📁 Project Structure
+
+```text
+ShopLoop/
+│
+├── backend/
+│   ├── controllers/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── .env.example
+│   ├── package.json
+│   └── server.js
+│
+├── frontend/
+│   ├── src/
+│   ├── public/
+│   ├── .env.example
+│   ├── package.json
+│   └── vite.config.js
+│
+├── .gitignore
+└── README.md
 ```
-ecommerce-app/
-  backend/     Express API (auth, cart, orders)
-  frontend/    React app (Vite + Tailwind)
+
+---
+
+## ⚙️ Installation
+
+### Clone the repository
+
+```bash
+git clone https://github.com/salwa010/ShopLoop.git
+
+cd ShopLoop
 ```
 
-Products themselves are NOT stored in MongoDB — they're fetched live from DummyJSON on the
-frontend. Only user accounts, carts, and orders live in your MongoDB database (cart/order items
-store a snapshot of product id, title, price, and thumbnail at the time they were added).
+---
 
-## 1. Backend setup
+## Backend Setup
 
 ```bash
 cd backend
+
 npm install
-cp .env.example .env
 ```
 
-Edit `.env`:
-- `MONGO_URI` — point this at a local MongoDB instance (`mongodb://127.0.0.1:27017/ecommerce_app`)
-  or a free MongoDB Atlas cluster connection string.
-- `JWT_SECRET` — any long random string (e.g. run `openssl rand -hex 32`).
+Create a `.env` file inside the **backend** folder.
 
-Run the server:
+Example:
+
+```env
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_secret_key
+PORT=5000
+```
+
+Start the backend server:
 
 ```bash
 npm run dev
 ```
 
-The API runs on `http://localhost:5000`. Check `http://localhost:5000/api/health` returns `{"status":"ok"}`.
+The backend will run on:
 
-### API endpoints
+```
+http://localhost:5000
+```
 
-| Method | Route                  | Auth | Description               |
-|--------|-------------------------|------|----------------------------|
-| POST   | /api/auth/register      | No   | Create account             |
-| POST   | /api/auth/login         | No   | Log in                     |
-| GET    | /api/auth/profile       | Yes  | Get current user           |
-| GET    | /api/cart               | Yes  | Get current user's cart    |
-| POST   | /api/cart                | Yes  | Add item to cart           |
-| PUT    | /api/cart/:productId    | Yes  | Update item quantity       |
-| DELETE | /api/cart/:productId    | Yes  | Remove item from cart      |
-| DELETE | /api/cart                | Yes  | Clear cart                 |
-| POST   | /api/orders              | Yes  | Checkout (creates order from cart) |
-| GET    | /api/orders              | Yes  | List current user's orders |
-| GET    | /api/orders/:id          | Yes  | Get one order               |
+Health Check:
 
-## 2. Frontend setup
+```
+http://localhost:5000/api/health
+```
+
+---
+
+## Frontend Setup
+
+Open another terminal.
 
 ```bash
 cd frontend
+
 npm install
-cp .env.example .env
+```
+
+Create a `.env` file inside the **frontend** folder.
+
+```env
+VITE_API_URL=http://localhost:5000/api
+```
+
+Run the frontend:
+
+```bash
 npm run dev
 ```
 
-The app runs on `http://localhost:5173`.
+The frontend will run on:
 
-## 3. Try it out
+```
+http://localhost:5173
+```
 
-1. Sign up for an account.
-2. Browse/search/filter products on the home page.
-3. Add items to your cart (this calls the backend, so the backend + MongoDB must be running).
-4. Go to Cart → Checkout → fill in a shipping address → Place order.
-5. View your order history under "Orders" in the navbar.
+---
 
-## Notes for learning
+## 🧪 How to Use
 
-- **Auth**: passwords are hashed with bcrypt; login returns a JWT stored in `localStorage` on
-  the frontend and sent as a `Bearer` token on every request via an axios interceptor
-  (`frontend/src/api/axios.js`).
-- **Cart/Order snapshotting**: since products live on DummyJSON (not your DB), cart and order
-  items store a copy of the product's title/price/thumbnail at add-time. This is a common real-world
-  pattern — order history shouldn't change if a product's price changes later.
-- **No real payments**: checkout simulates a successful payment and marks the order `paid`
-  immediately. Wiring up Stripe test mode would be a natural next step once you're comfortable
-  with this flow.
-- **Where to extend next**: product reviews, an admin panel to manage orders, pagination for the
-  product grid, or moving products into your own MongoDB collection instead of DummyJSON.
+1. Register a new account.
+2. Log in securely.
+3. Browse available products.
+4. Search and filter products.
+5. View product details.
+6. Add items to your shopping cart.
+7. Checkout by entering a shipping address.
+8. View your previous orders.
+
+---
+
+## 🔗 API Endpoints
+
+| Method | Endpoint               | Description     |
+| ------ | ---------------------- | --------------- |
+| POST   | `/api/auth/register`   | Register user   |
+| POST   | `/api/auth/login`      | Login           |
+| GET    | `/api/auth/profile`    | User profile    |
+| GET    | `/api/cart`            | Get cart        |
+| POST   | `/api/cart`            | Add item        |
+| PUT    | `/api/cart/:productId` | Update quantity |
+| DELETE | `/api/cart/:productId` | Remove item     |
+| DELETE | `/api/cart`            | Clear cart      |
+| POST   | `/api/orders`          | Checkout        |
+| GET    | `/api/orders`          | Get orders      |
+| GET    | `/api/orders/:id`      | Order details   |
+
+---
+
+## 🔐 Authentication
+
+* JWT Authentication
+* Passwords hashed using bcrypt
+* Protected API routes
+* Axios interceptor automatically sends Bearer token
+
+---
+
+## 📦 Database
+
+MongoDB stores:
+
+* User Accounts
+* Shopping Cart
+* Orders
+
+Products are **not stored** in MongoDB. They are retrieved from the **DummyJSON API** and a snapshot (product ID, title, price, thumbnail) is saved in the cart and order documents.
+
+---
+
+## 🌐 Environment Variables
+
+### Backend
+
+```env
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_secret_key
+PORT=5000
+```
+
+### Frontend
+
+```env
+VITE_API_URL=http://localhost:5000/api
+```
+
+---
+
+## 📸 Screenshots
+
+Add screenshots here after deployment.
+
+```
+screenshots/
+│
+├── home.png
+├── product-details.png
+├── cart.png
+├── checkout.png
+├── orders.png
+```
+
+Example:
+
+```markdown
+![Home](screenshots/home.png)
+
+![Cart](screenshots/cart.png)
+```
+
+---
+
+## 🚀 Deployment
+
+### Frontend
+
+Deploy on **Vercel**.
+
+### Backend
+
+Deploy on **Render**.
+
+After deployment, update the frontend environment variable:
+
+```env
+VITE_API_URL=https://your-backend.onrender.com/api
+```
+
+---
+
+## 🔮 Future Improvements
+
+* Stripe payment integration
+* Wishlist
+* Product reviews
+* Admin dashboard
+* Product categories
+* Pagination
+* Inventory management
+* Image uploads
+* Email notifications
+
+---
+
+## 📄 License
+
+This project was developed for learning and portfolio purposes.
+
+---
+
+## 👩‍💻 Author
+
+**Salwa**
+
+GitHub: https://github.com/salwa010
